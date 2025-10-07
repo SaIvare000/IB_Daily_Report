@@ -69,7 +69,7 @@ tbody td{padding:12px;border-bottom:1px dashed var(--line);color:#111}
 <div class="container">
 <div class="header">
 <h1>持仓报告</h1>
-<div class="badge">生成时间：2025-10-07 02:57:31｜账户：U15118386</div>
+<div class="badge">生成时间：2025-10-07 16:36:42｜账户：U15118386</div>
 </div>
 
 
@@ -78,14 +78,14 @@ tbody td{padding:12px;border-bottom:1px dashed var(--line);color:#111}
 <div class="overview-left">
 <div class="card">
     <div class="grid">
-    <div><span>总现金</span><strong>772.29 USD</strong></div>
-    <div><span>可用资金</span><strong>35,996.60 USD</strong></div>
-    <div><span>购买力</span><strong>143,977.07 USD</strong></div>
-    <div><span>可用保证金</span><strong>36,058.29 USD</strong></div>
-    <div><span>净清算价值</span><strong>51,877.23 USD</strong></div>
+    <div><span>总现金</span><strong>-124.19 USD</strong></div>
+    <div><span>可用资金</span><strong>35,511.32 USD</strong></div>
+    <div><span>购买力</span><strong>141,993.10 USD</strong></div>
+    <div><span>可用保证金</span><strong>35,590.18 USD</strong></div>
+    <div><span>净清算价值</span><strong>51,494.92 USD</strong></div>
     <div><span>投机仓位占比</span><strong id="spec-line">0.0%</strong></div>
     </div>
-    <div id="spec-meta" data-account="U15118386" data-net-liq="51877.23"></div>
+    <div id="spec-meta" data-account="U15118386" data-net-liq="51494.92"></div>
     </div>
 </div>
 <div class="overview-right">
@@ -106,6 +106,7 @@ tbody td{padding:12px;border-bottom:1px dashed var(--line);color:#111}
         <select id="beta-benchmark">
           <option value="SPY">SPY</option>
           <option value="QQQ">QQQ</option>
+          <option value="IWM">IWM</option>
         </select>
         <div class="beta-note">投资组合 Beta: <span id="beta-total">-</span></div>
       </div>
@@ -118,7 +119,7 @@ tbody td{padding:12px;border-bottom:1px dashed var(--line);color:#111}
       <div class="var-summary">
         <span>期间 <strong>1 天</strong></span>
         <span>置信度 <strong>99%</strong></span>
-        <span>组合VaR <strong id="var-total">1,003.26 USD (1.93%)</strong></span>
+        <span>组合VaR <strong id="var-total">1,603.22 USD (3.11%)</strong></span>
       </div>
     </div>
     <div class="scatter-wrap"><canvas id="varScatter"></canvas></div>
@@ -144,262 +145,275 @@ tbody td{padding:12px;border-bottom:1px dashed var(--line);color:#111}
                 <th class="num">投机仓位</th>
             </tr></thead>
             <tbody>
-        <tr data-conid="153090099" data-mv="31142.37">
+        <tr data-conid="153090099" data-mv="31063.71">
             <td>HYGH</td>
             <td>ETF</td>
             <td>Fixed Income</td>
             <td class="num">360.09</td>
             <td class="num">86.25</td>
-            <td class="num">86.48</td>
-            <td class="num">31,142.37</td>
-            <td class="num">85.91</td>
+            <td class="num">86.27</td>
+            <td class="num">31,063.71</td>
+            <td class="num">7.24</td>
             <td class="num">0.00</td>
             <td class="num">-</td>
             <td class="num"><input type="checkbox" class="spec-toggle" /></td>
         </tr>
-        <tr data-conid="4815747" data-mv="3341.34">
+        <tr data-conid="4815747" data-mv="2223.24">
             <td>NVDA</td>
             <td>Stock</td>
             <td>Technology / Electronic Compo-Semicon</td>
-            <td class="num">18.0</td>
+            <td class="num">12.0</td>
             <td class="num">181.14</td>
-            <td class="num">185.63</td>
-            <td class="num">3,341.34</td>
-            <td class="num">80.83</td>
-            <td class="num">0.00</td>
+            <td class="num">185.27</td>
+            <td class="num">2,223.24</td>
+            <td class="num">49.57</td>
+            <td class="num">27.80</td>
             <td class="num">3.81</td>
             <td class="num"><input type="checkbox" class="spec-toggle" /></td>
         </tr>
-        <tr data-conid="55279376" data-mv="2182.81">
+        <tr data-conid="55279376" data-mv="2153.75">
             <td>TCEHY</td>
             <td>ADR</td>
             <td>Communications / Internet Content-Info/Ne</td>
             <td class="num">25.0</td>
             <td class="num">80.53</td>
-            <td class="num">87.31</td>
-            <td class="num">2,182.81</td>
-            <td class="num">169.58</td>
+            <td class="num">86.15</td>
+            <td class="num">2,153.75</td>
+            <td class="num">140.52</td>
             <td class="num">0.00</td>
             <td class="num">3.29</td>
             <td class="num"><input type="checkbox" class="spec-toggle" /></td>
         </tr>
-        <tr data-conid="43645865" data-mv="2091.0">
+        <tr data-conid="43645865" data-mv="2079.0">
             <td>IBKR</td>
             <td>Stock</td>
             <td>Financial / Finance-Invest Bnkr/Brkr</td>
             <td class="num">30.0</td>
             <td class="num">56.41</td>
-            <td class="num">69.70</td>
-            <td class="num">2,091.00</td>
-            <td class="num">398.59</td>
+            <td class="num">69.30</td>
+            <td class="num">2,079.00</td>
+            <td class="num">386.59</td>
             <td class="num">0.00</td>
             <td class="num">3.64</td>
             <td class="num"><input type="checkbox" class="spec-toggle" /></td>
         </tr>
-        <tr data-conid="330981427" data-mv="1382.29">
+        <tr data-conid="76792991" data-mv="1740.8">
+            <td>TSLA</td>
+            <td>Stock</td>
+            <td>Consumer, Cyclical / Auto-Cars/Light Trucks</td>
+            <td class="num">4.0</td>
+            <td class="num">437.33</td>
+            <td class="num">435.20</td>
+            <td class="num">1,740.80</td>
+            <td class="num">-8.51</td>
+            <td class="num">0.00</td>
+            <td class="num">2.60</td>
+            <td class="num"><input type="checkbox" class="spec-toggle" /></td>
+        </tr>
+        <tr data-conid="330981427" data-mv="1373.82">
             <td>XIACY</td>
             <td>ADR</td>
             <td>Communications / Wireless Equipment</td>
             <td class="num">39.75</td>
             <td class="num">33.24</td>
-            <td class="num">34.77</td>
-            <td class="num">1,382.29</td>
-            <td class="num">60.91</td>
+            <td class="num">34.56</td>
+            <td class="num">1,373.82</td>
+            <td class="num">52.45</td>
             <td class="num">0.00</td>
             <td class="num">3.39</td>
             <td class="num"><input type="checkbox" class="spec-toggle" /></td>
         </tr>
-        <tr data-conid="76792991" data-mv="1361.7">
-            <td>TSLA</td>
-            <td>Stock</td>
-            <td>Consumer, Cyclical / Auto-Cars/Light Trucks</td>
-            <td class="num">3.0</td>
-            <td class="num">435.56</td>
-            <td class="num">453.90</td>
-            <td class="num">1,361.70</td>
-            <td class="num">55.03</td>
-            <td class="num">0.00</td>
-            <td class="num">2.60</td>
-            <td class="num"><input type="checkbox" class="spec-toggle" /></td>
-        </tr>
-        <tr data-conid="6746554" data-mv="934.08">
+        <tr data-conid="6746554" data-mv="1189.78">
             <td>VSAT</td>
             <td>Stock</td>
             <td>Communications / Wireless Equipment</td>
-            <td class="num">28.0</td>
-            <td class="num">29.00</td>
-            <td class="num">33.36</td>
-            <td class="num">934.08</td>
-            <td class="num">122.00</td>
+            <td class="num">38.0</td>
+            <td class="num">29.72</td>
+            <td class="num">31.31</td>
+            <td class="num">1,189.78</td>
+            <td class="num">60.42</td>
             <td class="num">0.00</td>
             <td class="num">2.56</td>
             <td class="num"><input type="checkbox" class="spec-toggle" /></td>
         </tr>
-        <tr data-conid="310621426" data-mv="915.72">
+        <tr data-conid="310621426" data-mv="1173.2">
             <td>ZS</td>
             <td>Stock</td>
             <td>Technology / Computer Data Security</td>
-            <td class="num">3.0</td>
-            <td class="num">278.41</td>
-            <td class="num">305.24</td>
-            <td class="num">915.72</td>
-            <td class="num">80.48</td>
+            <td class="num">4.0</td>
+            <td class="num">281.86</td>
+            <td class="num">293.30</td>
+            <td class="num">1,173.20</td>
+            <td class="num">45.76</td>
             <td class="num">0.00</td>
             <td class="num">2.69</td>
             <td class="num"><input type="checkbox" class="spec-toggle" /></td>
         </tr>
-        <tr data-conid="444857009" data-mv="897.1">
+        <tr data-conid="395196161" data-mv="1108.17">
+            <td>BILL</td>
+            <td>Stock</td>
+            <td>Technology / Enterprise Software/Serv</td>
+            <td class="num">21.0</td>
+            <td class="num">52.68</td>
+            <td class="num">52.77</td>
+            <td class="num">1,108.17</td>
+            <td class="num">1.81</td>
+            <td class="num">0.00</td>
+            <td class="num">2.85</td>
+            <td class="num"><input type="checkbox" class="spec-toggle" /></td>
+        </tr>
+        <tr data-conid="49921110" data-mv="1060.2">
+            <td>NTAP</td>
+            <td>Stock</td>
+            <td>Technology / Computers-Memory Devices</td>
+            <td class="num">9.0</td>
+            <td class="num">118.58</td>
+            <td class="num">117.80</td>
+            <td class="num">1,060.20</td>
+            <td class="num">-6.98</td>
+            <td class="num">0.00</td>
+            <td class="num">2.79</td>
+            <td class="num"><input type="checkbox" class="spec-toggle" /></td>
+        </tr>
+        <tr data-conid="444857009" data-mv="910.2">
             <td>PLTR</td>
             <td>Stock</td>
             <td>Technology / Enterprise Software/Serv</td>
             <td class="num">5.0</td>
             <td class="num">178.53</td>
-            <td class="num">179.42</td>
-            <td class="num">897.10</td>
-            <td class="num">4.43</td>
+            <td class="num">182.04</td>
+            <td class="num">910.20</td>
+            <td class="num">17.53</td>
             <td class="num">0.00</td>
             <td class="num">3.40</td>
             <td class="num"><input type="checkbox" class="spec-toggle" /></td>
         </tr>
-        <tr data-conid="271568" data-mv="863.07">
-            <td>MCHP</td>
-            <td>Stock</td>
-            <td>Technology / Electronic Compo-Semicon</td>
-            <td class="num">13.0</td>
-            <td class="num">64.29</td>
-            <td class="num">66.39</td>
-            <td class="num">863.07</td>
-            <td class="num">27.35</td>
-            <td class="num">0.00</td>
-            <td class="num">1.95</td>
-            <td class="num"><input type="checkbox" class="spec-toggle" /></td>
-        </tr>
-        <tr data-conid="4726021" data-mv="846.01">
-            <td>SWKS</td>
-            <td>Stock</td>
-            <td>Technology / Electronic Compo-Semicon</td>
-            <td class="num">11.0</td>
-            <td class="num">76.57</td>
-            <td class="num">76.91</td>
-            <td class="num">846.01</td>
-            <td class="num">3.79</td>
-            <td class="num">0.00</td>
-            <td class="num">2.64</td>
-            <td class="num"><input type="checkbox" class="spec-toggle" /></td>
-        </tr>
-        <tr data-conid="466188387" data-mv="815.7">
+        <tr data-conid="466188387" data-mv="867.6">
             <td>HIMS</td>
             <td>Stock</td>
             <td>Communications / E-Commerce/Products</td>
             <td class="num">15.0</td>
             <td class="num">54.75</td>
-            <td class="num">54.38</td>
-            <td class="num">815.70</td>
-            <td class="num">-5.57</td>
+            <td class="num">57.84</td>
+            <td class="num">867.60</td>
+            <td class="num">46.33</td>
             <td class="num">0.00</td>
             <td class="num">3.44</td>
             <td class="num"><input type="checkbox" class="spec-toggle" /></td>
         </tr>
-        <tr data-conid="4457287" data-mv="769.26">
+        <tr data-conid="271568" data-mv="845.39">
+            <td>MCHP</td>
+            <td>Stock</td>
+            <td>Technology / Electronic Compo-Semicon</td>
+            <td class="num">13.0</td>
+            <td class="num">64.29</td>
+            <td class="num">65.03</td>
+            <td class="num">845.39</td>
+            <td class="num">9.67</td>
+            <td class="num">0.00</td>
+            <td class="num">1.95</td>
+            <td class="num"><input type="checkbox" class="spec-toggle" /></td>
+        </tr>
+        <tr data-conid="4726021" data-mv="817.74">
+            <td>SWKS</td>
+            <td>Stock</td>
+            <td>Technology / Electronic Compo-Semicon</td>
+            <td class="num">11.0</td>
+            <td class="num">76.57</td>
+            <td class="num">74.34</td>
+            <td class="num">817.74</td>
+            <td class="num">-24.48</td>
+            <td class="num">0.00</td>
+            <td class="num">2.64</td>
+            <td class="num"><input type="checkbox" class="spec-toggle" /></td>
+        </tr>
+        <tr data-conid="4457287" data-mv="735.75">
             <td>IT</td>
             <td>Stock</td>
             <td>Technology / Computer Services</td>
             <td class="num">3.0</td>
             <td class="num">252.09</td>
-            <td class="num">256.42</td>
-            <td class="num">769.26</td>
-            <td class="num">12.98</td>
+            <td class="num">245.25</td>
+            <td class="num">735.75</td>
+            <td class="num">-20.53</td>
             <td class="num">0.00</td>
             <td class="num">2.99</td>
             <td class="num"><input type="checkbox" class="spec-toggle" /></td>
         </tr>
-        <tr data-conid="13096" data-mv="726.28">
+        <tr data-conid="13096" data-mv="708.8">
             <td>TXN</td>
             <td>Stock</td>
             <td>Technology / Electronic Compo-Semicon</td>
             <td class="num">4.0</td>
             <td class="num">181.64</td>
-            <td class="num">181.57</td>
-            <td class="num">726.28</td>
-            <td class="num">-0.27</td>
+            <td class="num">177.20</td>
+            <td class="num">708.80</td>
+            <td class="num">-17.75</td>
             <td class="num">0.00</td>
             <td class="num">2.39</td>
             <td class="num"><input type="checkbox" class="spec-toggle" /></td>
         </tr>
-        <tr data-conid="49921110" data-mv="722.38">
-            <td>NTAP</td>
+        <tr data-conid="444884769" data-mv="703.65">
+            <td>SNOW</td>
             <td>Stock</td>
-            <td>Technology / Computers-Memory Devices</td>
-            <td class="num">6.0</td>
-            <td class="num">118.73</td>
-            <td class="num">120.40</td>
-            <td class="num">722.38</td>
-            <td class="num">10.02</td>
+            <td>Technology / Computer Software</td>
+            <td class="num">3.0</td>
+            <td class="num">231.39</td>
+            <td class="num">234.55</td>
+            <td class="num">703.65</td>
+            <td class="num">9.47</td>
             <td class="num">0.00</td>
-            <td class="num">2.79</td>
+            <td class="num">2.07</td>
             <td class="num"><input type="checkbox" class="spec-toggle" /></td>
         </tr>
-        <tr data-conid="395196161" data-mv="696.8">
-            <td>BILL</td>
-            <td>Stock</td>
-            <td>Technology / Enterprise Software/Serv</td>
-            <td class="num">13.0</td>
-            <td class="num">54.10</td>
-            <td class="num">53.60</td>
-            <td class="num">696.80</td>
-            <td class="num">-6.54</td>
-            <td class="num">0.00</td>
-            <td class="num">2.85</td>
-            <td class="num"><input type="checkbox" class="spec-toggle" /></td>
-        </tr>
-        <tr data-conid="361181057" data-mv="566.44">
+        <tr data-conid="361181057" data-mv="554.4">
             <td>ZM</td>
             <td>Stock</td>
             <td>Technology / Communications Software</td>
             <td class="num">7.0</td>
             <td class="num">80.67</td>
-            <td class="num">80.92</td>
-            <td class="num">566.44</td>
-            <td class="num">1.76</td>
+            <td class="num">79.20</td>
+            <td class="num">554.40</td>
+            <td class="num">-10.28</td>
             <td class="num">0.00</td>
             <td class="num">3.29</td>
             <td class="num"><input type="checkbox" class="spec-toggle" /></td>
         </tr>
-        <tr data-conid="444884769" data-mv="485.84">
-            <td>SNOW</td>
-            <td>Stock</td>
-            <td>Technology / Computer Software</td>
-            <td class="num">2.0</td>
-            <td class="num">230.70</td>
-            <td class="num">242.92</td>
-            <td class="num">485.84</td>
-            <td class="num">24.44</td>
-            <td class="num">0.00</td>
-            <td class="num">2.07</td>
-            <td class="num"><input type="checkbox" class="spec-toggle" /></td>
-        </tr>
-        <tr data-conid="772724580" data-mv="211.57">
+        <tr data-conid="772724580" data-mv="186.99">
             <td>LI</td>
             <td>Option</td>
             <td>Consumer, Cyclical / Auto-Cars/Light Trucks</td>
             <td class="num">1.0</td>
             <td class="num">243.05</td>
-            <td class="num">2.12</td>
-            <td class="num">211.57</td>
-            <td class="num">-31.48</td>
+            <td class="num">1.87</td>
+            <td class="num">186.99</td>
+            <td class="num">-56.06</td>
             <td class="num">0.00</td>
             <td class="num">3.21</td>
             <td class="num"><input type="checkbox" class="spec-toggle" /></td>
         </tr>
-        <tr data-conid="771894767" data-mv="45.62">
+        <tr data-conid="815633702" data-mv="69.67">
+            <td>TLRY</td>
+            <td>Option</td>
+            <td>Consumer, Non-cyclical / Medical-Drugs</td>
+            <td class="num">2.0</td>
+            <td class="num">35.70</td>
+            <td class="num">0.35</td>
+            <td class="num">69.67</td>
+            <td class="num">-1.72</td>
+            <td class="num">0.00</td>
+            <td class="num">2.63</td>
+            <td class="num"><input type="checkbox" class="spec-toggle" /></td>
+        </tr>
+        <tr data-conid="771894767" data-mv="48.71">
             <td>WFC</td>
             <td>Option</td>
             <td>Financial / Super-Regional Banks-US</td>
             <td class="num">2.0</td>
             <td class="num">59.54</td>
-            <td class="num">0.23</td>
-            <td class="num">45.62</td>
-            <td class="num">-73.46</td>
+            <td class="num">0.24</td>
+            <td class="num">48.71</td>
+            <td class="num">-70.37</td>
             <td class="num">0.00</td>
             <td class="num">2.57</td>
             <td class="num"><input type="checkbox" class="spec-toggle" /></td>
@@ -440,16 +454,16 @@ tbody td{padding:12px;border-bottom:1px dashed var(--line);color:#111}
 Chart.register(ChartDataLabels);
 
 // 从后端注入的原始数组（字符串已是合法 JSON）
-let labelsA = ["Cash", "HYGH (STK)", "NVDA (STK)", "TCEHY (STK)", "IBKR (STK)", "XIACY (STK)", "TSLA (STK)", "VSAT (STK)", "ZS (STK)", "PLTR (STK)", "MCHP (STK)", "SWKS (STK)", "HIMS (STK)", "IT (STK)", "TXN (STK)", "NTAP (STK)", "BILL (STK)", "ZM (STK)", "SNOW (STK)", "LI (OPT)", "Others"];
-let valuesA = [772.29, 31142.37, 3341.34, 2182.81, 2091.0, 1382.29, 1361.7, 934.08, 915.72, 897.1, 863.07, 846.01, 815.7, 769.26, 726.28, 722.38, 696.8, 566.44, 485.84, 211.57, 45.62];
+let labelsA = ["Cash", "HYGH (STK)", "NVDA (STK)", "TCEHY (STK)", "IBKR (STK)", "TSLA (STK)", "XIACY (STK)", "VSAT (STK)", "ZS (STK)", "BILL (STK)", "NTAP (STK)", "PLTR (STK)", "HIMS (STK)", "MCHP (STK)", "SWKS (STK)", "IT (STK)", "TXN (STK)", "SNOW (STK)", "ZM (STK)", "LI (OPT)", "TLRY (OPT)", "Others"];
+let valuesA = [124.19, 31063.71, 2223.24, 2153.75, 2079.0, 1740.8, 1373.82, 1189.78, 1173.2, 1108.17, 1060.2, 910.2, 867.6, 845.39, 817.74, 735.75, 708.8, 703.65, 554.4, 186.99, 69.67, 48.71];
 let labelsB = ["Cash", "ETF", "Stock", "ADR", "Option"];
-let valuesB = [772.29, 31142.37, 16032.720000000001, 3565.1, 257.19];
-let labelsC = ["Fixed Income", "Technology", "Communications", "Financial", "Consumer, Cyclical"];
-let valuesC = [31142.37, 10830.240000000002, 5314.88, 2136.62, 1573.27];
+let valuesB = [124.19, 31063.71, 16717.92, 3527.5699999999997, 305.37];
+let labelsC = ["Fixed Income", "Technology", "Communications", "Financial", "Consumer, Cyclical", "Consumer, Non-cyclical"];
+let valuesC = [31063.71, 10840.74, 5584.95, 2127.71, 1927.79, 69.67];
 let radarLabels = ["相对价值", "盈利能力", "现金流", "成长性", "价格动能"];
-let radarValues = [1.98, 3.64, 3.23, 3.27, 3.5];
-const varData = {"points": [{"s": "HYGH", "w": 0.610666, "mv": 31142.37, "vol_annual": 0.0379696164609294, "sigma_daily": 0.00239186101266961, "var_abs": 173.28551373888715, "var_pct_port": 0.0033403000456826075, "method": "Historical Volatility"}, {"s": "NVDA", "w": 0.06552, "mv": 3341.34, "vol_annual": 0.2750405204613693, "sigma_daily": 0.0173259242287275, "var_abs": 134.67647437445203, "var_pct_port": 0.0025960614006270578, "method": "VIX-like"}, {"s": "TCEHY", "w": 0.042802, "mv": 2182.81, "vol_annual": 0.1916574147922313, "sigma_daily": 0.012073282296709429, "var_abs": 61.307830535382124, "var_pct_port": 0.0011817868944695412, "method": "Historical Volatility"}, {"s": "IBKR", "w": 0.041002, "mv": 2091.0, "vol_annual": 0.25789419073961267, "sigma_daily": 0.01624580698250647, "var_abs": 79.02599633842424, "var_pct_port": 0.0015233272157828056, "method": "VIX-like"}, {"s": "XIACY", "w": 0.027105, "mv": 1382.29, "vol_annual": 0.4034203198565909, "sigma_daily": 0.02541309143263504, "var_abs": 81.72055798633022, "var_pct_port": 0.0015752683400083276, "method": "Historical Volatility"}, {"s": "TSLA", "w": 0.026701, "mv": 1361.7, "vol_annual": 0.23952547671014246, "sigma_daily": 0.01508868676283882, "var_abs": 47.7977593554394, "var_pct_port": 0.0009213629824768863, "method": "VIX-like"}, {"s": "VSAT", "w": 0.018316, "mv": 934.08, "vol_annual": 0.4349877750360479, "sigma_daily": 0.02740165419282602, "var_abs": 59.543658160620154, "var_pct_port": 0.0011477802141829883, "method": "VIX-like"}, {"s": "ZS", "w": 0.017956, "mv": 915.72, "vol_annual": 0.16478053056020403, "sigma_daily": 0.010380197732561396, "var_abs": 22.112761623117635, "var_pct_port": 0.0004262517798871997, "method": "VIX-like"}, {"s": "PLTR", "w": 0.017591, "mv": 897.1, "vol_annual": 0.27184299113723975, "sigma_daily": 0.017124498814406475, "var_abs": 35.738258399726824, "var_pct_port": 0.0006889006679756575, "method": "VIX-like"}, {"s": "MCHP", "w": 0.016924, "mv": 863.07, "vol_annual": 0.4500377119423608, "sigma_daily": 0.028349711104762133, "var_abs": 56.920579996868234, "var_pct_port": 0.0010972170255980943, "method": "VIX-like"}, {"s": "SWKS", "w": 0.016589, "mv": 846.01, "vol_annual": 0.30702420779500433, "sigma_daily": 0.01934070715005238, "var_abs": 38.064708097110945, "var_pct_port": 0.0007337459632503691, "method": "VIX-like"}, {"s": "HIMS", "w": 0.015995, "mv": 815.7, "vol_annual": 0.39422324506635625, "sigma_daily": 0.024833730178248796, "var_abs": 47.12453508159174, "var_pct_port": 0.0009083857230155067, "method": "VIX-like"}, {"s": "IT", "w": 0.015084, "mv": 769.26, "vol_annual": 0.33810271398004765, "sigma_daily": 0.021298469018743032, "var_abs": 38.11502379438939, "var_pct_port": 0.0007347158627087334, "method": "VIX-like"}, {"s": "TXN", "w": 0.014242, "mv": 726.28, "vol_annual": 0.27820561093473983, "sigma_daily": 0.017525306187526506, "var_abs": 29.610405670921455, "var_pct_port": 0.0005707784642881174, "method": "VIX-like"}, {"s": "NTAP", "w": 0.014165, "mv": 722.38, "vol_annual": 0.16103618502352227, "sigma_daily": 0.010144326134638667, "var_abs": 17.047612877621198, "var_pct_port": 0.00032861455551156445, "method": "VIX-like"}, {"s": "BILL", "w": 0.013663, "mv": 696.8, "vol_annual": 0.2825870367341297, "sigma_daily": 0.01780131006974241, "var_abs": 28.855909357646105, "var_pct_port": 0.0005562345822559551, "method": "VIX-like"}, {"s": "ZM", "w": 0.011107, "mv": 566.44, "vol_annual": 0.2482284153960247, "sigma_daily": 0.015636920368512337, "var_abs": 20.60534055724295, "var_pct_port": 0.00039719430966616664, "method": "VIX-like"}, {"s": "SNOW", "w": 0.009527, "mv": 485.84, "vol_annual": 0.25752243804694364, "sigma_daily": 0.016222388764077403, "var_abs": 18.335076704865177, "var_pct_port": 0.0003534320684598074, "method": "VIX-like"}, {"s": "LI", "w": 0.004149, "mv": 211.57, "vol_annual": 0.39342577191956896, "sigma_daily": 0.024783494091971385, "var_abs": 12.19807444155758, "var_pct_port": 0.00023513349578529113, "method": "VIX-like"}, {"s": "WFC", "w": 0.000895, "mv": 45.62, "vol_annual": 0.17545619315982786, "sigma_daily": 0.011052701263976585, "var_abs": 1.1730009693681933, "var_pct_port": 2.2611094874730076e-05, "method": "VIX-like"}], "total_var": 1003.2590780615626, "total_var_pct": 0.019339102686507403, "confidence": 0.99, "horizon_days": 1, "net_liq": 51877.23, "currency": "USD"};
-let betaScatters = {"SPY": {"points": [{"s": "HYGH", "w": 0.610666, "beta": 0.273}, {"s": "NVDA", "w": 0.06552, "beta": 1.852}, {"s": "TCEHY", "w": 0.042802, "beta": 0.476}, {"s": "IBKR", "w": 0.041002, "beta": 1.564}, {"s": "XIACY", "w": 0.027105, "beta": 0.692}, {"s": "TSLA", "w": 0.026701, "beta": 2.286}, {"s": "VSAT", "w": 0.018316, "beta": 1.597}, {"s": "ZS", "w": 0.017956, "beta": 1.319}, {"s": "PLTR", "w": 0.017591, "beta": 2.022}, {"s": "MCHP", "w": 0.016924, "beta": 2.074}, {"s": "SWKS", "w": 0.016589, "beta": 1.607}, {"s": "HIMS", "w": 0.015995, "beta": 2.337}, {"s": "IT", "w": 0.015084, "beta": 0.89}, {"s": "TXN", "w": 0.014242, "beta": 1.308}, {"s": "NTAP", "w": 0.014165, "beta": 1.241}, {"s": "BILL", "w": 0.013663, "beta": 1.702}, {"s": "ZM", "w": 0.011107, "beta": 0.849}, {"s": "SNOW", "w": 0.009527, "beta": 1.416}, {"s": "LI", "w": 0.004149, "beta": 0.603}, {"s": "WFC", "w": 0.000895, "beta": 1.061}], "total": 0.7393}, "QQQ": {"points": [{"s": "HYGH", "w": 0.610666, "beta": 0.213}, {"s": "NVDA", "w": 0.06552, "beta": 1.671}, {"s": "TCEHY", "w": 0.042802, "beta": 0.393}, {"s": "IBKR", "w": 0.041002, "beta": 1.304}, {"s": "XIACY", "w": 0.027105, "beta": 0.553}, {"s": "TSLA", "w": 0.026701, "beta": 2.003}, {"s": "VSAT", "w": 0.018316, "beta": 1.274}, {"s": "ZS", "w": 0.017956, "beta": 1.142}, {"s": "PLTR", "w": 0.017591, "beta": 1.807}, {"s": "MCHP", "w": 0.016924, "beta": 1.67}, {"s": "SWKS", "w": 0.016589, "beta": 1.262}, {"s": "HIMS", "w": 0.015995, "beta": 2.02}, {"s": "IT", "w": 0.015084, "beta": 0.672}, {"s": "TXN", "w": 0.014242, "beta": 1.054}, {"s": "NTAP", "w": 0.014165, "beta": 1.05}, {"s": "BILL", "w": 0.013663, "beta": 1.404}, {"s": "ZM", "w": 0.011107, "beta": 0.698}, {"s": "SNOW", "w": 0.009527, "beta": 1.219}, {"s": "LI", "w": 0.004149, "beta": 0.483}, {"s": "WFC", "w": 0.000895, "beta": 0.791}], "total": 0.6167}};
+let radarValues = [1.99, 3.49, 3.12, 3.17, 3.44];
+const varData = {"points": [{"s": "HYGH", "w": 0.60184, "mv": 31063.71, "vol_annual": 0.03837836528573219, "sigma_daily": 0.002417609768362898, "var_abs": 174.70855955931634, "var_pct_port": 0.0033927338766487325, "method": "Historical Volatility"}, {"s": "NVDA", "w": 0.043074, "mv": 2223.24, "vol_annual": 0.43290413811666817, "sigma_daily": 0.027270397404463367, "var_abs": 141.04330387451594, "var_pct_port": 0.002738975104233892, "method": "VIX-like"}, {"s": "TCEHY", "w": 0.041728, "mv": 2153.75, "vol_annual": 0.19200434354704377, "sigma_daily": 0.012095136754040168, "var_abs": 60.60113130786583, "var_pct_port": 0.0011768370803928977, "method": "Historical Volatility"}, {"s": "IBKR", "w": 0.040279, "mv": 2079.0, "vol_annual": 0.4581984231253733, "sigma_daily": 0.028863787588373435, "var_abs": 139.59905144650324, "var_pct_port": 0.002710928601238787, "method": "VIX-like"}, {"s": "TSLA", "w": 0.033727, "mv": 1740.8, "vol_annual": 0.7040036126984791, "sigma_daily": 0.044348059078362125, "var_abs": 179.5966177516903, "var_pct_port": 0.0034876569912467154, "method": "VIX-like"}, {"s": "XIACY", "w": 0.026617, "mv": 1373.82, "vol_annual": 0.39577331830160173, "sigma_daily": 0.024931375613829673, "var_abs": 79.68025852006693, "var_pct_port": 0.001547342116854768, "method": "Historical Volatility"}, {"s": "VSAT", "w": 0.023051, "mv": 1189.78, "vol_annual": 0.9649262047935688, "sigma_daily": 0.06078463741459915, "var_abs": 168.2422829416721, "var_pct_port": 0.0032671627209377566, "method": "VIX-like"}, {"s": "ZS", "w": 0.02273, "mv": 1173.2, "vol_annual": 0.28811598487210005, "sigma_daily": 0.01814960106461963, "var_abs": 49.53518576082407, "var_pct_port": 0.0009619431540203203, "method": "VIX-like"}, {"s": "BILL", "w": 0.02147, "mv": 1108.17, "vol_annual": 0.3064048133234866, "sigma_daily": 0.01930168896588371, "var_abs": 49.759540360354194, "var_pct_port": 0.0009662999837722672, "method": "VIX-like"}, {"s": "NTAP", "w": 0.020541, "mv": 1060.2, "vol_annual": 0.19764901264634746, "sigma_daily": 0.012450717484278466, "var_abs": 30.708375098854365, "var_pct_port": 0.0005963379513717929, "method": "VIX-like"}, {"s": "PLTR", "w": 0.017635, "mv": 910.2, "vol_annual": 0.7017295625216287, "sigma_daily": 0.044204807382247156, "var_abs": 93.60110845716396, "var_pct_port": 0.0018176765486219604, "method": "VIX-like"}, {"s": "HIMS", "w": 0.016809, "mv": 867.6, "vol_annual": 1.0573234102197737, "sigma_daily": 0.06660511425733928, "var_abs": 134.4317273806567, "var_pct_port": 0.002610582313374925, "method": "VIX-like"}, {"s": "MCHP", "w": 0.016379, "mv": 845.39, "vol_annual": 0.42228641126988115, "sigma_daily": 0.026601543482429737, "var_abs": 52.31649022014867, "var_pct_port": 0.0010159543935624848, "method": "VIX-like"}, {"s": "SWKS", "w": 0.015843, "mv": 817.74, "vol_annual": 0.4793162489413342, "sigma_daily": 0.030194085572645156, "var_abs": 57.43964956031083, "var_pct_port": 0.0011154430293378616, "method": "VIX-like"}, {"s": "IT", "w": 0.014255, "mv": 735.75, "vol_annual": 0.46161172954596014, "sigma_daily": 0.029078805682119457, "var_abs": 49.771587630343994, "var_pct_port": 0.0009665339344219584, "method": "VIX-like"}, {"s": "TXN", "w": 0.013733, "mv": 708.8, "vol_annual": 0.4007193836078028, "sigma_daily": 0.025242948441650925, "var_abs": 41.62348574831749, "var_pct_port": 0.0008083027558508198, "method": "VIX-like"}, {"s": "SNOW", "w": 0.013633, "mv": 703.65, "vol_annual": 0.41777686303151124, "sigma_daily": 0.026317468645192205, "var_abs": 43.079977156415566, "var_pct_port": 0.0008365869323889728, "method": "VIX-like"}, {"s": "ZM", "w": 0.010741, "mv": 554.4, "vol_annual": 0.23599431734658663, "sigma_daily": 0.01486624463151249, "var_abs": 19.173400975430937, "var_pct_port": 0.0003723357755567139, "method": "VIX-like"}, {"s": "LI", "w": 0.003623, "mv": 186.99, "vol_annual": 0.5849812923848527, "sigma_daily": 0.03685035764941626, "var_abs": 16.030045202281343, "var_pct_port": 0.0003112937198908425, "method": "VIX-like"}, {"s": "TLRY", "w": 0.00135, "mv": 69.67, "vol_annual": 1.9659421968976556, "sigma_daily": 0.1238427177361708, "var_abs": 20.072013608238734, "var_pct_port": 0.00038978628587516467, "method": "VIX-like"}, {"s": "WFC", "w": 0.000944, "mv": 48.71, "vol_annual": 0.30899843762451207, "sigma_daily": 0.019465071939570543, "var_abs": 2.205711974178771, "var_pct_port": 4.283358385989863e-05, "method": "VIX-like"}], "total_var": 1603.2195045351496, "total_var_pct": 0.031133546853459516, "confidence": 0.99, "horizon_days": 1, "net_liq": 51494.92, "currency": "USD"};
+let betaScatters = {"SPY": {"points": [{"s": "HYGH", "w": 0.60184, "beta": 0.274}, {"s": "NVDA", "w": 0.043074, "beta": 1.846}, {"s": "TCEHY", "w": 0.041728, "beta": 0.497}, {"s": "IBKR", "w": 0.040279, "beta": 1.569}, {"s": "TSLA", "w": 0.033727, "beta": 2.292}, {"s": "XIACY", "w": 0.026617, "beta": 0.718}, {"s": "VSAT", "w": 0.023051, "beta": 1.615}, {"s": "ZS", "w": 0.02273, "beta": 1.317}, {"s": "BILL", "w": 0.02147, "beta": 1.706}, {"s": "NTAP", "w": 0.020541, "beta": 1.24}, {"s": "PLTR", "w": 0.017635, "beta": 2.01}, {"s": "HIMS", "w": 0.016809, "beta": 2.344}, {"s": "MCHP", "w": 0.016379, "beta": 2.078}, {"s": "SWKS", "w": 0.015843, "beta": 1.61}, {"s": "IT", "w": 0.014255, "beta": 0.894}, {"s": "TXN", "w": 0.013733, "beta": 1.312}, {"s": "SNOW", "w": 0.013633, "beta": 1.424}, {"s": "ZM", "w": 0.010741, "beta": 0.852}, {"s": "LI", "w": 0.003623, "beta": 0.625}, {"s": "TLRY", "w": 0.00135, "beta": 1.426}, {"s": "WFC", "w": 0.000944, "beta": 1.061}], "total": 0.7529}, "QQQ": {"points": [{"s": "HYGH", "w": 0.60184, "beta": 0.214}, {"s": "NVDA", "w": 0.043074, "beta": 1.666}, {"s": "TCEHY", "w": 0.041728, "beta": 0.417}, {"s": "IBKR", "w": 0.040279, "beta": 1.311}, {"s": "TSLA", "w": 0.033727, "beta": 2.011}, {"s": "XIACY", "w": 0.026617, "beta": 0.582}, {"s": "VSAT", "w": 0.023051, "beta": 1.293}, {"s": "ZS", "w": 0.02273, "beta": 1.14}, {"s": "BILL", "w": 0.02147, "beta": 1.41}, {"s": "NTAP", "w": 0.020541, "beta": 1.049}, {"s": "PLTR", "w": 0.017635, "beta": 1.796}, {"s": "HIMS", "w": 0.016809, "beta": 2.031}, {"s": "MCHP", "w": 0.016379, "beta": 1.674}, {"s": "SWKS", "w": 0.015843, "beta": 1.266}, {"s": "IT", "w": 0.014255, "beta": 0.676}, {"s": "TXN", "w": 0.013733, "beta": 1.059}, {"s": "SNOW", "w": 0.013633, "beta": 1.228}, {"s": "ZM", "w": 0.010741, "beta": 0.702}, {"s": "LI", "w": 0.003623, "beta": 0.508}, {"s": "TLRY", "w": 0.00135, "beta": 1.188}, {"s": "WFC", "w": 0.000944, "beta": 0.793}], "total": 0.6276}, "IWM": {"points": [{"s": "HYGH", "w": 0.60184, "beta": 0.204}, {"s": "NVDA", "w": 0.043074, "beta": 1.169}, {"s": "TCEHY", "w": 0.041728, "beta": 0.378}, {"s": "IBKR", "w": 0.040279, "beta": 1.159}, {"s": "TSLA", "w": 0.033727, "beta": 1.74}, {"s": "XIACY", "w": 0.026617, "beta": 0.539}, {"s": "VSAT", "w": 0.023051, "beta": 1.576}, {"s": "ZS", "w": 0.02273, "beta": 0.988}, {"s": "BILL", "w": 0.02147, "beta": 1.486}, {"s": "NTAP", "w": 0.020541, "beta": 0.987}, {"s": "PLTR", "w": 0.017635, "beta": 1.496}, {"s": "HIMS", "w": 0.016809, "beta": 2.141}, {"s": "MCHP", "w": 0.016379, "beta": 1.618}, {"s": "SWKS", "w": 0.015843, "beta": 1.257}, {"s": "IT", "w": 0.014255, "beta": 0.718}, {"s": "TXN", "w": 0.013733, "beta": 0.996}, {"s": "SNOW", "w": 0.013633, "beta": 1.088}, {"s": "ZM", "w": 0.010741, "beta": 0.767}, {"s": "LI", "w": 0.003623, "beta": 0.556}, {"s": "TLRY", "w": 0.00135, "beta": 1.403}, {"s": "WFC", "w": 0.000944, "beta": 0.967}], "total": 0.5802}};
 
 // 强制转换为 Number，避免 NaN%
 valuesA = valuesA.map(v => Number(v) || 0);
