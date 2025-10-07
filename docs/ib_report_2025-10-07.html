@@ -1,0 +1,1165 @@
+<!doctype html>
+<html lang="zh-CN"><head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>持仓报告</title>
+<style>
+:root { --line:#e5e7eb; --text:#111; --muted:#4b5563; }
+*{box-sizing:border-box}
+body{margin:0;padding:24px;background:#ffffff;color:var(--text);
+font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Arial}
+.container{max-width:1200px;margin:0 auto}
+
+
+.header{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:16px}
+h1{margin:0;font-size:26px;color:#111} h2{margin:24px 0 12px;font-size:18px;color:#1f2937}
+.badge{font-size:12px;background:#eef2ff;color:#1f2937;padding:6px 10px;border-radius:4px;border:1px solid #dbeafe}
+
+
+/* 卡片统一直角无阴影 */
+.card{background:#ffffff;border:1px solid var(--line);border-radius:0;padding:16px;color:var(--text)}
+.card-title{font-weight:700;color:#1f2937;margin-bottom:10px}
+
+
+/* 账户概览：左右分栏 */
+.overview-wrap{display:flex;flex-wrap:wrap;gap:16px;align-items:stretch}
+.overview-left{flex:1 1 55%}
+.overview-right{flex:1 1 40%;min-width:300px}
+
+
+.card .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.card .grid>div{display:flex;justify-content:space-between;background:#f9fafb;border:1px solid var(--line);
+padding:10px 12px;border-radius:0}
+.card span{color:#6b7280;font-size:12px}
+
+
+.num{text-align:right;font-variant-numeric:tabular-nums}
+
+
+.pies{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px}
+.pie{background:#ffffff;border:1px solid var(--line);border-radius:0;padding:12px;color:var(--text)}
+.canvas-wrap{position:relative;width:100%;height:260px}
+.scatter-wrap{position:relative;width:100%;height:320px}
+.risk-row{display:flex;flex-wrap:wrap;gap:16px;margin-top:16px}
+.beta-card,.var-card{flex:1 1 360px}
+.beta-card{margin:0}
+.var-card{display:flex;flex-direction:column}
+.beta-header{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px}
+.var-header{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px}
+.beta-controls{display:flex;align-items:center;gap:8px;font-size:12px;color:#6b7280}
+.beta-controls label{font-weight:600}
+.beta-controls select{font-size:12px;padding:2px 6px;border:1px solid var(--line);border-radius:4px;background:#fff;color:var(--text)}
+.beta-note{font-size:12px;color:#6b7280}
+.beta-note span{font-weight:600;color:#111}
+.var-summary{display:flex;flex-wrap:wrap;gap:12px;font-size:12px;color:#6b7280}
+.var-summary span{display:flex;align-items:center;gap:4px}
+.var-summary strong{color:#111}
+
+
+.table-wrap{overflow:auto;background:#ffffff;border:1px solid var(--line);border-radius:0;color:var(--text)}
+table{width:100%;border-collapse:collapse;min-width:1040px}
+thead th{text-align:left;padding:12px;font-size:12px;color:#374151;background:#f9fafb;position:sticky;top:0;border-bottom:1px solid var(--line);white-space:nowrap}
+tbody td{padding:12px;border-bottom:1px dashed var(--line);color:#111}
+.small{color:#6b7280;font-size:12px}
+</style>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0"></script>
+</head>
+<body>
+<div class="container">
+<div class="header">
+<h1>持仓报告</h1>
+<div class="badge">生成时间：2025-10-07 02:57:31｜账户：U15118386</div>
+</div>
+
+
+<h2>账户概览</h2>
+<div class="overview-wrap">
+<div class="overview-left">
+<div class="card">
+    <div class="grid">
+    <div><span>总现金</span><strong>772.29 USD</strong></div>
+    <div><span>可用资金</span><strong>35,996.60 USD</strong></div>
+    <div><span>购买力</span><strong>143,977.07 USD</strong></div>
+    <div><span>可用保证金</span><strong>36,058.29 USD</strong></div>
+    <div><span>净清算价值</span><strong>51,877.23 USD</strong></div>
+    <div><span>投机仓位占比</span><strong id="spec-line">0.0%</strong></div>
+    </div>
+    <div id="spec-meta" data-account="U15118386" data-net-liq="51877.23"></div>
+    </div>
+</div>
+<div class="overview-right">
+<div class="card">
+<div class="card-title">财务稳健总览</div>
+<div class="canvas-wrap"><canvas id="radarScore"></canvas></div>
+</div>
+</div>
+</div>
+
+<h2>风险评估</h2>
+<div class="risk-row">
+  <div class="card beta-card">
+    <div class="beta-header">
+    <div class="card-title">Beta 分布</div>
+      <div class="beta-controls">
+        <label for="beta-benchmark">基准指数</label>
+        <select id="beta-benchmark">
+          <option value="SPY">SPY</option>
+          <option value="QQQ">QQQ</option>
+        </select>
+        <div class="beta-note">投资组合 Beta: <span id="beta-total">-</span></div>
+      </div>
+    </div>
+    <div class="scatter-wrap"><canvas id="betaScatter"></canvas></div>
+  </div>
+  <div class="card var-card">
+    <div class="var-header">
+      <div class="card-title">VaR 风险</div>
+      <div class="var-summary">
+        <span>期间 <strong>1 天</strong></span>
+        <span>置信度 <strong>99%</strong></span>
+        <span>组合VaR <strong id="var-total">1,003.26 USD (1.93%)</strong></span>
+      </div>
+    </div>
+    <div class="scatter-wrap"><canvas id="varScatter"></canvas></div>
+  </div>
+</div>
+
+
+<h2>资产分布</h2>
+<div class="pies">
+<div class="pie"><div class="small">股票代码</div><div class="canvas-wrap"><canvas id="pieTicker"></canvas></div></div>
+<div class="pie"><div class="small">标的类型</div><div class="canvas-wrap"><canvas id="pieType"></canvas></div></div>
+<div class="pie"><div class="small">行业分布</div><div class="canvas-wrap"><canvas id="pieIndustry"></canvas></div></div>
+</div>
+
+    <h2>持仓明细</h2>
+    <div class="table-wrap">
+        <table>
+            <thead><tr>
+                <th>标的</th><th>类型</th><th>行业 / 细分行业</th>
+                <th class="num">持仓</th><th class="num">均价</th><th class="num">现价</th>
+                <th class="num">市值</th><th class="num">未实现盈亏</th><th class="num">已实现盈亏</th>
+                <th class="num">财务稳健度</th>
+                <th class="num">投机仓位</th>
+            </tr></thead>
+            <tbody>
+        <tr data-conid="153090099" data-mv="31142.37">
+            <td>HYGH</td>
+            <td>ETF</td>
+            <td>Fixed Income</td>
+            <td class="num">360.09</td>
+            <td class="num">86.25</td>
+            <td class="num">86.48</td>
+            <td class="num">31,142.37</td>
+            <td class="num">85.91</td>
+            <td class="num">0.00</td>
+            <td class="num">-</td>
+            <td class="num"><input type="checkbox" class="spec-toggle" /></td>
+        </tr>
+        <tr data-conid="4815747" data-mv="3341.34">
+            <td>NVDA</td>
+            <td>Stock</td>
+            <td>Technology / Electronic Compo-Semicon</td>
+            <td class="num">18.0</td>
+            <td class="num">181.14</td>
+            <td class="num">185.63</td>
+            <td class="num">3,341.34</td>
+            <td class="num">80.83</td>
+            <td class="num">0.00</td>
+            <td class="num">3.81</td>
+            <td class="num"><input type="checkbox" class="spec-toggle" /></td>
+        </tr>
+        <tr data-conid="55279376" data-mv="2182.81">
+            <td>TCEHY</td>
+            <td>ADR</td>
+            <td>Communications / Internet Content-Info/Ne</td>
+            <td class="num">25.0</td>
+            <td class="num">80.53</td>
+            <td class="num">87.31</td>
+            <td class="num">2,182.81</td>
+            <td class="num">169.58</td>
+            <td class="num">0.00</td>
+            <td class="num">3.29</td>
+            <td class="num"><input type="checkbox" class="spec-toggle" /></td>
+        </tr>
+        <tr data-conid="43645865" data-mv="2091.0">
+            <td>IBKR</td>
+            <td>Stock</td>
+            <td>Financial / Finance-Invest Bnkr/Brkr</td>
+            <td class="num">30.0</td>
+            <td class="num">56.41</td>
+            <td class="num">69.70</td>
+            <td class="num">2,091.00</td>
+            <td class="num">398.59</td>
+            <td class="num">0.00</td>
+            <td class="num">3.64</td>
+            <td class="num"><input type="checkbox" class="spec-toggle" /></td>
+        </tr>
+        <tr data-conid="330981427" data-mv="1382.29">
+            <td>XIACY</td>
+            <td>ADR</td>
+            <td>Communications / Wireless Equipment</td>
+            <td class="num">39.75</td>
+            <td class="num">33.24</td>
+            <td class="num">34.77</td>
+            <td class="num">1,382.29</td>
+            <td class="num">60.91</td>
+            <td class="num">0.00</td>
+            <td class="num">3.39</td>
+            <td class="num"><input type="checkbox" class="spec-toggle" /></td>
+        </tr>
+        <tr data-conid="76792991" data-mv="1361.7">
+            <td>TSLA</td>
+            <td>Stock</td>
+            <td>Consumer, Cyclical / Auto-Cars/Light Trucks</td>
+            <td class="num">3.0</td>
+            <td class="num">435.56</td>
+            <td class="num">453.90</td>
+            <td class="num">1,361.70</td>
+            <td class="num">55.03</td>
+            <td class="num">0.00</td>
+            <td class="num">2.60</td>
+            <td class="num"><input type="checkbox" class="spec-toggle" /></td>
+        </tr>
+        <tr data-conid="6746554" data-mv="934.08">
+            <td>VSAT</td>
+            <td>Stock</td>
+            <td>Communications / Wireless Equipment</td>
+            <td class="num">28.0</td>
+            <td class="num">29.00</td>
+            <td class="num">33.36</td>
+            <td class="num">934.08</td>
+            <td class="num">122.00</td>
+            <td class="num">0.00</td>
+            <td class="num">2.56</td>
+            <td class="num"><input type="checkbox" class="spec-toggle" /></td>
+        </tr>
+        <tr data-conid="310621426" data-mv="915.72">
+            <td>ZS</td>
+            <td>Stock</td>
+            <td>Technology / Computer Data Security</td>
+            <td class="num">3.0</td>
+            <td class="num">278.41</td>
+            <td class="num">305.24</td>
+            <td class="num">915.72</td>
+            <td class="num">80.48</td>
+            <td class="num">0.00</td>
+            <td class="num">2.69</td>
+            <td class="num"><input type="checkbox" class="spec-toggle" /></td>
+        </tr>
+        <tr data-conid="444857009" data-mv="897.1">
+            <td>PLTR</td>
+            <td>Stock</td>
+            <td>Technology / Enterprise Software/Serv</td>
+            <td class="num">5.0</td>
+            <td class="num">178.53</td>
+            <td class="num">179.42</td>
+            <td class="num">897.10</td>
+            <td class="num">4.43</td>
+            <td class="num">0.00</td>
+            <td class="num">3.40</td>
+            <td class="num"><input type="checkbox" class="spec-toggle" /></td>
+        </tr>
+        <tr data-conid="271568" data-mv="863.07">
+            <td>MCHP</td>
+            <td>Stock</td>
+            <td>Technology / Electronic Compo-Semicon</td>
+            <td class="num">13.0</td>
+            <td class="num">64.29</td>
+            <td class="num">66.39</td>
+            <td class="num">863.07</td>
+            <td class="num">27.35</td>
+            <td class="num">0.00</td>
+            <td class="num">1.95</td>
+            <td class="num"><input type="checkbox" class="spec-toggle" /></td>
+        </tr>
+        <tr data-conid="4726021" data-mv="846.01">
+            <td>SWKS</td>
+            <td>Stock</td>
+            <td>Technology / Electronic Compo-Semicon</td>
+            <td class="num">11.0</td>
+            <td class="num">76.57</td>
+            <td class="num">76.91</td>
+            <td class="num">846.01</td>
+            <td class="num">3.79</td>
+            <td class="num">0.00</td>
+            <td class="num">2.64</td>
+            <td class="num"><input type="checkbox" class="spec-toggle" /></td>
+        </tr>
+        <tr data-conid="466188387" data-mv="815.7">
+            <td>HIMS</td>
+            <td>Stock</td>
+            <td>Communications / E-Commerce/Products</td>
+            <td class="num">15.0</td>
+            <td class="num">54.75</td>
+            <td class="num">54.38</td>
+            <td class="num">815.70</td>
+            <td class="num">-5.57</td>
+            <td class="num">0.00</td>
+            <td class="num">3.44</td>
+            <td class="num"><input type="checkbox" class="spec-toggle" /></td>
+        </tr>
+        <tr data-conid="4457287" data-mv="769.26">
+            <td>IT</td>
+            <td>Stock</td>
+            <td>Technology / Computer Services</td>
+            <td class="num">3.0</td>
+            <td class="num">252.09</td>
+            <td class="num">256.42</td>
+            <td class="num">769.26</td>
+            <td class="num">12.98</td>
+            <td class="num">0.00</td>
+            <td class="num">2.99</td>
+            <td class="num"><input type="checkbox" class="spec-toggle" /></td>
+        </tr>
+        <tr data-conid="13096" data-mv="726.28">
+            <td>TXN</td>
+            <td>Stock</td>
+            <td>Technology / Electronic Compo-Semicon</td>
+            <td class="num">4.0</td>
+            <td class="num">181.64</td>
+            <td class="num">181.57</td>
+            <td class="num">726.28</td>
+            <td class="num">-0.27</td>
+            <td class="num">0.00</td>
+            <td class="num">2.39</td>
+            <td class="num"><input type="checkbox" class="spec-toggle" /></td>
+        </tr>
+        <tr data-conid="49921110" data-mv="722.38">
+            <td>NTAP</td>
+            <td>Stock</td>
+            <td>Technology / Computers-Memory Devices</td>
+            <td class="num">6.0</td>
+            <td class="num">118.73</td>
+            <td class="num">120.40</td>
+            <td class="num">722.38</td>
+            <td class="num">10.02</td>
+            <td class="num">0.00</td>
+            <td class="num">2.79</td>
+            <td class="num"><input type="checkbox" class="spec-toggle" /></td>
+        </tr>
+        <tr data-conid="395196161" data-mv="696.8">
+            <td>BILL</td>
+            <td>Stock</td>
+            <td>Technology / Enterprise Software/Serv</td>
+            <td class="num">13.0</td>
+            <td class="num">54.10</td>
+            <td class="num">53.60</td>
+            <td class="num">696.80</td>
+            <td class="num">-6.54</td>
+            <td class="num">0.00</td>
+            <td class="num">2.85</td>
+            <td class="num"><input type="checkbox" class="spec-toggle" /></td>
+        </tr>
+        <tr data-conid="361181057" data-mv="566.44">
+            <td>ZM</td>
+            <td>Stock</td>
+            <td>Technology / Communications Software</td>
+            <td class="num">7.0</td>
+            <td class="num">80.67</td>
+            <td class="num">80.92</td>
+            <td class="num">566.44</td>
+            <td class="num">1.76</td>
+            <td class="num">0.00</td>
+            <td class="num">3.29</td>
+            <td class="num"><input type="checkbox" class="spec-toggle" /></td>
+        </tr>
+        <tr data-conid="444884769" data-mv="485.84">
+            <td>SNOW</td>
+            <td>Stock</td>
+            <td>Technology / Computer Software</td>
+            <td class="num">2.0</td>
+            <td class="num">230.70</td>
+            <td class="num">242.92</td>
+            <td class="num">485.84</td>
+            <td class="num">24.44</td>
+            <td class="num">0.00</td>
+            <td class="num">2.07</td>
+            <td class="num"><input type="checkbox" class="spec-toggle" /></td>
+        </tr>
+        <tr data-conid="772724580" data-mv="211.57">
+            <td>LI</td>
+            <td>Option</td>
+            <td>Consumer, Cyclical / Auto-Cars/Light Trucks</td>
+            <td class="num">1.0</td>
+            <td class="num">243.05</td>
+            <td class="num">2.12</td>
+            <td class="num">211.57</td>
+            <td class="num">-31.48</td>
+            <td class="num">0.00</td>
+            <td class="num">3.21</td>
+            <td class="num"><input type="checkbox" class="spec-toggle" /></td>
+        </tr>
+        <tr data-conid="771894767" data-mv="45.62">
+            <td>WFC</td>
+            <td>Option</td>
+            <td>Financial / Super-Regional Banks-US</td>
+            <td class="num">2.0</td>
+            <td class="num">59.54</td>
+            <td class="num">0.23</td>
+            <td class="num">45.62</td>
+            <td class="num">-73.46</td>
+            <td class="num">0.00</td>
+            <td class="num">2.57</td>
+            <td class="num"><input type="checkbox" class="spec-toggle" /></td>
+        </tr>
+        <tr data-conid="514640214" data-mv="0">
+            <td>ACHR</td>
+            <td>Stock</td>
+            <td>Industrial / Aerospace/Defense</td>
+            <td class="num">0.0</td>
+            <td class="num">0.00</td>
+            <td class="num">13.77</td>
+            <td class="num">0.00</td>
+            <td class="num">0.00</td>
+            <td class="num">0.00</td>
+            <td class="num">1.76</td>
+            <td class="num"><input type="checkbox" class="spec-toggle" /></td>
+        </tr>
+        <tr data-conid="4391" data-mv="0">
+            <td>AMD</td>
+            <td>Stock</td>
+            <td>Technology / Electronic Compo-Semicon</td>
+            <td class="num">0.0</td>
+            <td class="num">0.00</td>
+            <td class="num">206.88</td>
+            <td class="num">0.00</td>
+            <td class="num">0.00</td>
+            <td class="num">0.00</td>
+            <td class="num">2.83</td>
+            <td class="num"><input type="checkbox" class="spec-toggle" /></td>
+        </tr></tbody>
+        </table>
+    </div>
+
+    <p class="small">Powered by Ruohao Huang</p>
+</div>
+
+<script>
+Chart.register(ChartDataLabels);
+
+// 从后端注入的原始数组（字符串已是合法 JSON）
+let labelsA = ["Cash", "HYGH (STK)", "NVDA (STK)", "TCEHY (STK)", "IBKR (STK)", "XIACY (STK)", "TSLA (STK)", "VSAT (STK)", "ZS (STK)", "PLTR (STK)", "MCHP (STK)", "SWKS (STK)", "HIMS (STK)", "IT (STK)", "TXN (STK)", "NTAP (STK)", "BILL (STK)", "ZM (STK)", "SNOW (STK)", "LI (OPT)", "Others"];
+let valuesA = [772.29, 31142.37, 3341.34, 2182.81, 2091.0, 1382.29, 1361.7, 934.08, 915.72, 897.1, 863.07, 846.01, 815.7, 769.26, 726.28, 722.38, 696.8, 566.44, 485.84, 211.57, 45.62];
+let labelsB = ["Cash", "ETF", "Stock", "ADR", "Option"];
+let valuesB = [772.29, 31142.37, 16032.720000000001, 3565.1, 257.19];
+let labelsC = ["Fixed Income", "Technology", "Communications", "Financial", "Consumer, Cyclical"];
+let valuesC = [31142.37, 10830.240000000002, 5314.88, 2136.62, 1573.27];
+let radarLabels = ["相对价值", "盈利能力", "现金流", "成长性", "价格动能"];
+let radarValues = [1.98, 3.64, 3.23, 3.27, 3.5];
+const varData = {"points": [{"s": "HYGH", "w": 0.610666, "mv": 31142.37, "vol_annual": 0.0379696164609294, "sigma_daily": 0.00239186101266961, "var_abs": 173.28551373888715, "var_pct_port": 0.0033403000456826075, "method": "Historical Volatility"}, {"s": "NVDA", "w": 0.06552, "mv": 3341.34, "vol_annual": 0.2750405204613693, "sigma_daily": 0.0173259242287275, "var_abs": 134.67647437445203, "var_pct_port": 0.0025960614006270578, "method": "VIX-like"}, {"s": "TCEHY", "w": 0.042802, "mv": 2182.81, "vol_annual": 0.1916574147922313, "sigma_daily": 0.012073282296709429, "var_abs": 61.307830535382124, "var_pct_port": 0.0011817868944695412, "method": "Historical Volatility"}, {"s": "IBKR", "w": 0.041002, "mv": 2091.0, "vol_annual": 0.25789419073961267, "sigma_daily": 0.01624580698250647, "var_abs": 79.02599633842424, "var_pct_port": 0.0015233272157828056, "method": "VIX-like"}, {"s": "XIACY", "w": 0.027105, "mv": 1382.29, "vol_annual": 0.4034203198565909, "sigma_daily": 0.02541309143263504, "var_abs": 81.72055798633022, "var_pct_port": 0.0015752683400083276, "method": "Historical Volatility"}, {"s": "TSLA", "w": 0.026701, "mv": 1361.7, "vol_annual": 0.23952547671014246, "sigma_daily": 0.01508868676283882, "var_abs": 47.7977593554394, "var_pct_port": 0.0009213629824768863, "method": "VIX-like"}, {"s": "VSAT", "w": 0.018316, "mv": 934.08, "vol_annual": 0.4349877750360479, "sigma_daily": 0.02740165419282602, "var_abs": 59.543658160620154, "var_pct_port": 0.0011477802141829883, "method": "VIX-like"}, {"s": "ZS", "w": 0.017956, "mv": 915.72, "vol_annual": 0.16478053056020403, "sigma_daily": 0.010380197732561396, "var_abs": 22.112761623117635, "var_pct_port": 0.0004262517798871997, "method": "VIX-like"}, {"s": "PLTR", "w": 0.017591, "mv": 897.1, "vol_annual": 0.27184299113723975, "sigma_daily": 0.017124498814406475, "var_abs": 35.738258399726824, "var_pct_port": 0.0006889006679756575, "method": "VIX-like"}, {"s": "MCHP", "w": 0.016924, "mv": 863.07, "vol_annual": 0.4500377119423608, "sigma_daily": 0.028349711104762133, "var_abs": 56.920579996868234, "var_pct_port": 0.0010972170255980943, "method": "VIX-like"}, {"s": "SWKS", "w": 0.016589, "mv": 846.01, "vol_annual": 0.30702420779500433, "sigma_daily": 0.01934070715005238, "var_abs": 38.064708097110945, "var_pct_port": 0.0007337459632503691, "method": "VIX-like"}, {"s": "HIMS", "w": 0.015995, "mv": 815.7, "vol_annual": 0.39422324506635625, "sigma_daily": 0.024833730178248796, "var_abs": 47.12453508159174, "var_pct_port": 0.0009083857230155067, "method": "VIX-like"}, {"s": "IT", "w": 0.015084, "mv": 769.26, "vol_annual": 0.33810271398004765, "sigma_daily": 0.021298469018743032, "var_abs": 38.11502379438939, "var_pct_port": 0.0007347158627087334, "method": "VIX-like"}, {"s": "TXN", "w": 0.014242, "mv": 726.28, "vol_annual": 0.27820561093473983, "sigma_daily": 0.017525306187526506, "var_abs": 29.610405670921455, "var_pct_port": 0.0005707784642881174, "method": "VIX-like"}, {"s": "NTAP", "w": 0.014165, "mv": 722.38, "vol_annual": 0.16103618502352227, "sigma_daily": 0.010144326134638667, "var_abs": 17.047612877621198, "var_pct_port": 0.00032861455551156445, "method": "VIX-like"}, {"s": "BILL", "w": 0.013663, "mv": 696.8, "vol_annual": 0.2825870367341297, "sigma_daily": 0.01780131006974241, "var_abs": 28.855909357646105, "var_pct_port": 0.0005562345822559551, "method": "VIX-like"}, {"s": "ZM", "w": 0.011107, "mv": 566.44, "vol_annual": 0.2482284153960247, "sigma_daily": 0.015636920368512337, "var_abs": 20.60534055724295, "var_pct_port": 0.00039719430966616664, "method": "VIX-like"}, {"s": "SNOW", "w": 0.009527, "mv": 485.84, "vol_annual": 0.25752243804694364, "sigma_daily": 0.016222388764077403, "var_abs": 18.335076704865177, "var_pct_port": 0.0003534320684598074, "method": "VIX-like"}, {"s": "LI", "w": 0.004149, "mv": 211.57, "vol_annual": 0.39342577191956896, "sigma_daily": 0.024783494091971385, "var_abs": 12.19807444155758, "var_pct_port": 0.00023513349578529113, "method": "VIX-like"}, {"s": "WFC", "w": 0.000895, "mv": 45.62, "vol_annual": 0.17545619315982786, "sigma_daily": 0.011052701263976585, "var_abs": 1.1730009693681933, "var_pct_port": 2.2611094874730076e-05, "method": "VIX-like"}], "total_var": 1003.2590780615626, "total_var_pct": 0.019339102686507403, "confidence": 0.99, "horizon_days": 1, "net_liq": 51877.23, "currency": "USD"};
+let betaScatters = {"SPY": {"points": [{"s": "HYGH", "w": 0.610666, "beta": 0.273}, {"s": "NVDA", "w": 0.06552, "beta": 1.852}, {"s": "TCEHY", "w": 0.042802, "beta": 0.476}, {"s": "IBKR", "w": 0.041002, "beta": 1.564}, {"s": "XIACY", "w": 0.027105, "beta": 0.692}, {"s": "TSLA", "w": 0.026701, "beta": 2.286}, {"s": "VSAT", "w": 0.018316, "beta": 1.597}, {"s": "ZS", "w": 0.017956, "beta": 1.319}, {"s": "PLTR", "w": 0.017591, "beta": 2.022}, {"s": "MCHP", "w": 0.016924, "beta": 2.074}, {"s": "SWKS", "w": 0.016589, "beta": 1.607}, {"s": "HIMS", "w": 0.015995, "beta": 2.337}, {"s": "IT", "w": 0.015084, "beta": 0.89}, {"s": "TXN", "w": 0.014242, "beta": 1.308}, {"s": "NTAP", "w": 0.014165, "beta": 1.241}, {"s": "BILL", "w": 0.013663, "beta": 1.702}, {"s": "ZM", "w": 0.011107, "beta": 0.849}, {"s": "SNOW", "w": 0.009527, "beta": 1.416}, {"s": "LI", "w": 0.004149, "beta": 0.603}, {"s": "WFC", "w": 0.000895, "beta": 1.061}], "total": 0.7393}, "QQQ": {"points": [{"s": "HYGH", "w": 0.610666, "beta": 0.213}, {"s": "NVDA", "w": 0.06552, "beta": 1.671}, {"s": "TCEHY", "w": 0.042802, "beta": 0.393}, {"s": "IBKR", "w": 0.041002, "beta": 1.304}, {"s": "XIACY", "w": 0.027105, "beta": 0.553}, {"s": "TSLA", "w": 0.026701, "beta": 2.003}, {"s": "VSAT", "w": 0.018316, "beta": 1.274}, {"s": "ZS", "w": 0.017956, "beta": 1.142}, {"s": "PLTR", "w": 0.017591, "beta": 1.807}, {"s": "MCHP", "w": 0.016924, "beta": 1.67}, {"s": "SWKS", "w": 0.016589, "beta": 1.262}, {"s": "HIMS", "w": 0.015995, "beta": 2.02}, {"s": "IT", "w": 0.015084, "beta": 0.672}, {"s": "TXN", "w": 0.014242, "beta": 1.054}, {"s": "NTAP", "w": 0.014165, "beta": 1.05}, {"s": "BILL", "w": 0.013663, "beta": 1.404}, {"s": "ZM", "w": 0.011107, "beta": 0.698}, {"s": "SNOW", "w": 0.009527, "beta": 1.219}, {"s": "LI", "w": 0.004149, "beta": 0.483}, {"s": "WFC", "w": 0.000895, "beta": 0.791}], "total": 0.6167}};
+
+// 强制转换为 Number，避免 NaN%
+valuesA = valuesA.map(v => Number(v) || 0);
+valuesB = valuesB.map(v => Number(v) || 0);
+valuesC = valuesC.map(v => Number(v) || 0);
+
+function makeFormatter(lbls, vals) {
+    const total = (vals || []).reduce((a,b)=>a + (Number(b)||0), 0);
+    return function(ctx) {
+        const i = ctx.dataIndex;
+        const v = Number(vals[i] || 0);
+        if (!total || !v) return ''; // 总和为0或该切片为0则不显示
+        const p = v / total * 100;
+        if (p < 1) return '';        // 小于1%不标注，避免遮挡
+        const name = lbls[i] || '';
+        return name + ' ' + p.toFixed(1) + '%';
+    }
+}
+
+// 生成 warm -> cold 的渐变色（HSL 从橙到蓝）
+function warmColdColors(n) {
+    // RdBu_r 关键点
+    const base = [
+        [5, 48, 97],   // 深蓝
+        [33, 102, 172],
+        [67, 147, 195],
+        [146, 197, 222],
+        [209, 229, 240],// 浅蓝
+        [253, 219, 199],
+        [244, 165, 130],
+        [214, 96, 77],
+        [178, 24, 43],
+        [103, 0, 31]   // 深红
+    ];
+
+
+    let palette;
+    if (n < 5) {
+        // 只取蓝色区间：深蓝 → 浅蓝
+        palette = base.slice(0, 6); 
+    } else {
+        // 全部色表
+        palette = base;
+    }
+
+    const colors = [];
+    for (let i = 0; i < n; i++) {
+        const t = n === 1 ? 0.5 : i / (n - 1);
+        const idx = t * (palette.length - 1);
+        const i0 = Math.floor(idx);
+        const i1 = Math.min(palette.length - 1, i0 + 1);
+        const f = idx - i0;
+
+        const r = Math.round(palette[i0][0] + f * (palette[i1][0] - palette[i0][0]));
+        const g = Math.round(palette[i0][1] + f * (palette[i1][1] - palette[i0][1]));
+        const b = Math.round(palette[i0][2] + f * (palette[i1][2] - palette[i0][2]));
+
+        colors.push(`rgb(${r}, ${g}, ${b})`);
+    }
+    return colors;
+}
+
+
+let betaChart = null;
+let varChart = null;
+
+function colorForBeta(n) {
+    // n ∈ [0,1]，0 = 最冷（蓝），1 = 最热（红）
+    const base = [
+        [5, 48, 97],    // 深蓝
+        [33, 102, 172],
+        [67, 147, 195],
+        [146, 197, 222],
+        [209, 229, 240], // 浅蓝
+        [253, 219, 199],
+        [244, 165, 130],
+        [214, 96, 77],
+        [178, 24, 43],
+        [103, 0, 31]    // 深红
+    ];
+
+    // 限制输入范围
+    const t = Math.max(0, Math.min(1, n));
+    const idx = t * (base.length - 1);
+    const low = Math.floor(idx);
+    const high = Math.min(base.length - 1, low + 1);
+    const frac = idx - low;
+
+    const interp = (a, b) => Math.round(a + (b - a) * frac);
+    const [r1, g1, b1] = base[low];
+    const [r2, g2, b2] = base[high];
+
+    const r = interp(r1, r2);
+    const g = interp(g1, g2);
+    const b = interp(b1, b2);
+    return `rgb(${r}, ${g}, ${b})`;
+}
+
+function prettyLogTicks(minV, maxV) {
+  const bases = [1, 2, 5];
+  const ticks = [];
+  const p10 = (x) => Math.pow(10, x);
+  const start = Math.floor(Math.log10(minV));
+  const end   = Math.ceil(Math.log10(maxV));
+  for (let e = start; e <= end; e++) {
+    for (const b of bases) {
+      const v = b * p10(e);
+      if (v >= minV * 0.999 && v <= maxV * 1.001) ticks.push(v);
+    }
+  }
+  return ticks;
+}
+
+function drawBetaScatter(benchKey) {
+    const bench = (benchKey || 'SPY').toUpperCase();
+    const select = document.getElementById('beta-benchmark');
+    if (select && select.value.toUpperCase() != bench) {
+        select.value = bench;
+    }
+    const canvas = document.getElementById('betaScatter');
+    const ctx = canvas?.getContext('2d');
+    const dataObj = betaScatters?.[bench] || {};
+    const totalEl = document.getElementById('beta-total');
+    if (totalEl) {
+        const total = dataObj.total;
+        totalEl.textContent = total == null ? '-' : Number(total).toFixed(3);
+    }
+    if (!ctx) return;
+    const rawPoints = Array.isArray(dataObj.points) ? dataObj.points : [];
+    console.log('[beta] raw points', bench, rawPoints);
+    if (!rawPoints.length) {
+        if (betaChart) {
+            betaChart.destroy();
+            betaChart = null;
+        }
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = '#9ca3af';
+        ctx.font = '12px "Segoe UI", system-ui, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText('暂无数据', canvas.width / 2, canvas.height / 2);
+        return;
+    }
+
+    const points = rawPoints.map((d, idx) => {
+        const weight = Number(d.w) || 0;
+        const beta = Number(d.beta) || 0;
+        const betas = rawPoints.map(d => Number(d.beta)).filter(v => !isNaN(v));
+        const minBeta = Math.min(...betas);
+        const maxBeta = Math.max(...betas);
+        const colorValue = (beta - minBeta) / (maxBeta - minBeta);
+        if (!(weight > 0)) return null;
+        return { x: weight, y: Number(d.beta) || 0, s: d.s || '', _c: colorForBeta(colorValue, 1) };
+    }).filter(Boolean);
+    console.log('[beta] mapped points', bench, points);
+    const weights = points.map(p => p.x);
+    if (!weights.length) {
+        if (betaChart) {
+            betaChart.destroy();
+            betaChart = null;
+        }
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = '#9ca3af';
+        ctx.font = '12px "Segoe UI", system-ui, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText('暂无数据', canvas.width / 2, canvas.height / 2);
+        return;
+    }
+
+    const minW = Math.min(...weights);
+    const maxW = Math.max(...weights);
+    const xMin = Math.max(1e-6, minW * 0.8);
+    const xMax = Math.max(xMin * 1.001, maxW * 1.2);
+
+    const logMin = Math.log10(xMin);
+    const logMax = Math.log10(xMax);
+    const tickSteps = Math.max(3, Math.min(6, Math.round((logMax - logMin) * 3) + 1));
+    const tickValues = [];
+    for (let i = 0; i < tickSteps; i++) {
+        const t = logMin + (logMax - logMin) * (tickSteps === 1 ? 0 : i / (tickSteps - 1));
+        tickValues.push(Number((10 ** t).toPrecision(6)));
+    }
+    const uniqueTicks = [...new Set(tickValues.filter(v => v >= xMin && v <= xMax))];
+    uniqueTicks.sort((a, b) => a - b);
+    if (uniqueTicks.length < 2) {
+        uniqueTicks.length = 0;
+        uniqueTicks.push(xMin, xMax);
+    }
+
+    const config = {
+        type: 'scatter',
+        data: {
+            datasets: [{
+                label: `Beta vs ${bench}`,
+                data: points,
+                showLine: false,
+                pointBackgroundColor: (ctx) => ctx.raw ? ctx.raw._c : '#1f2937',
+                pointBorderColor: '#ffffff',
+                pointRadius: 6,
+                pointHoverRadius: 8
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            layout: {padding: {right: 12 } },
+            scales: {
+                x: {
+                    type: 'logarithmic',
+                    min: xMin,
+                    max: xMax,
+                    title: { display: true, text: '权重（对数）' },
+                    ticks: {
+                        values: uniqueTicks,
+                        callback: (val) => `${(val * 100).toFixed(val < 0.001 ? 3 : val < 0.01 ? 2 : 1)}%`,
+                        autoSkip: false,
+                        maxRotation: 45,
+                        minRotation: 45,
+                        padding: 6
+                    },
+                    afterBuildTicks: (axis) => { axis.ticks = prettyLogTicks(xMin, xMax).map(v => ({ value: v })); },
+                },
+                y: {
+                    title: { display: true, text: 'Beta' },
+                    grace: '10%'
+                }
+            },
+            plugins: {
+                legend: { display: false },
+                tooltip: {
+                    callbacks: {
+                        label: (ctx) => {
+                            const raw = ctx.raw || {};
+                            const w = (Number(raw.x) || 0) * 100;
+                            const beta = Number(raw.y) || 0;
+                            const name = raw.s || '';
+                            return `${name}: Beta ${beta.toFixed(3)} | 权重 ${w.toFixed(2)}%`;
+                        }
+                    }
+                },
+                datalabels: { display: false }
+            }
+        }
+    };
+
+    if (betaChart) {
+        betaChart.data.datasets[0].data = points;
+        betaChart.data.datasets[0].label = `Beta vs ${bench}`;
+        betaChart.options.scales.x.min = xMin;
+        betaChart.options.scales.x.max = xMax;
+        betaChart.options.scales.x.ticks.values = uniqueTicks;
+        betaChart.update();
+    } else {
+        betaChart = new Chart(ctx, config);
+    }
+}
+
+function initBetaScatters() {
+    const select = document.getElementById('beta-benchmark');
+    const initialBench = (select?.value || 'SPY').toUpperCase();
+    drawBetaScatter(initialBench);
+    if (select) {
+        select.addEventListener('change', () => {
+            drawBetaScatter(select.value);
+        });
+    }
+}
+document.addEventListener('DOMContentLoaded', initBetaScatters);
+
+function formatNumber(value, digits = 2) {
+    const num = Number(value);
+    if (!isFinite(num)) {
+        return Number(0).toFixed(digits);
+    }
+    return num.toLocaleString(undefined, {
+        minimumFractionDigits: digits,
+        maximumFractionDigits: digits
+    });
+}
+
+function drawVarScatter() {
+    const canvas = document.getElementById('varScatter');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    const dataObj = varData || {};
+    const rawPoints = Array.isArray(dataObj.points) ? dataObj.points : [];
+
+    const fallback = () => {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = '#9ca3af';
+        ctx.font = '12px "Segoe UI", system-ui, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText('暂无数据', canvas.width / 2, canvas.height / 2);
+    };
+
+    if (!rawPoints.length) {
+        if (varChart) {
+            varChart.destroy();
+            varChart = null;
+        }
+        fallback();
+        return;
+    }
+
+    const varValues = rawPoints.map(d => Math.abs(Number(d.var_abs) || 0)).filter(v => v > 0);
+    const weightsRaw = rawPoints.map(d => Number(d.w) || 0).filter(v => v > 0);
+    if (!varValues.length || !weightsRaw.length) {
+        if (varChart) {
+            varChart.destroy();
+            varChart = null;
+        }
+        fallback();
+        return;
+    }
+
+    const maxVar = Math.max(...varValues);
+    const minVar = Math.min(...varValues);
+    const denom = maxVar - minVar;
+    const usePct = rawPoints.some(d => d.var_pct_port !== null && d.var_pct_port !== undefined);
+
+    const points = rawPoints.map(d => {
+        const weight = Number(d.w) || 0;
+        const varAbs = Math.abs(Number(d.var_abs) || 0);
+        const varPct = d.var_pct_port != null ? Number(d.var_pct_port) : null;
+        if (!(weight > 0) || !(varAbs >= 0)) return null;
+        const value = usePct && varPct != null ? varPct * 100 : varAbs;
+        const colorValue = denom <= 0 ? 0.5 : (varAbs - minVar) / denom;
+        return {
+            x: weight,
+            y: value,
+            s: d.s || '',
+            _c: colorForBeta(Math.max(0, Math.min(1, colorValue))),
+            _varAbs: varAbs,
+            _varPct: varPct,
+            _mv: Math.abs(Number(d.mv) || 0),
+            _vol: Number(d.vol_annual) || 0,
+            _sigma: Number(d.sigma_daily) || 0,
+            _method: d.method || ''
+        };
+    }).filter(Boolean);
+
+    if (!points.length) {
+        if (varChart) {
+            varChart.destroy();
+            varChart = null;
+        }
+        fallback();
+        return;
+    }
+
+    const weights = points.map(p => p.x);
+    const minW = Math.min(...weights);
+    const maxW = Math.max(...weights);
+    const xMin = Math.max(1e-6, minW * 0.8);
+    const xMax = Math.max(xMin * 1.001, maxW * 1.2);
+    const xTicks = prettyLogTicks(xMin, xMax);
+    const currency = dataObj.currency || '';
+    const yLabel = usePct ? 'VaR/净值 (%)' : (currency ? `VaR (${currency})` : 'VaR');
+
+    const totalEl = document.getElementById('var-total');
+    if (totalEl) {
+        let totalText = '-';
+        const totalVar = Number(dataObj.total_var);
+        const totalPct = dataObj.total_var_pct != null ? Number(dataObj.total_var_pct) : null;
+        if (isFinite(totalVar)) {
+            totalText = `${formatNumber(totalVar, 2)}${currency ? ' ' + currency : ''}`;
+            if (totalPct != null && isFinite(totalPct)) {
+                totalText = `${totalText} (${formatNumber(totalPct * 100, 2)}%)`;
+            }
+        }
+        totalEl.textContent = totalText;
+    }
+
+    const config = {
+        type: 'scatter',
+        data: {
+            datasets: [{
+                label: 'VaR Scatter',
+                data: points,
+                showLine: false,
+                pointBackgroundColor: ctx => ctx.raw ? ctx.raw._c : '#1f2937',
+                pointBorderColor: '#ffffff',
+                pointRadius: 6,
+                pointHoverRadius: 8
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                x: {
+                    type: 'logarithmic',
+                    min: xMin,
+                    max: xMax,
+                    title: { display: true, text: '权重 (对数)' },
+                    ticks: {
+                        values: xTicks,
+                        callback: val => `${(val * 100).toFixed(val < 0.001 ? 3 : val < 0.01 ? 2 : 1)}%`,
+                        autoSkip: false,
+                        maxRotation: 45,
+                        minRotation: 45,
+                        padding: 6
+                    }
+                },
+                y: {
+                    title: { display: true, text: yLabel },
+                    grace: '20%'
+                }
+            },
+            plugins: {
+                legend: { display: false },
+                tooltip: {
+                    callbacks: {
+                        label: ctx => {
+                            const raw = ctx.raw || {};
+                            const name = raw.s || '';
+                            const weight = (Number(raw.x) || 0) * 100;
+                            const varAbs = raw._varAbs || 0;
+                            const varPct = raw._varPct != null ? raw._varPct * 100 : null;
+                            const vol = raw._vol || 0;
+                            const mv = raw._mv || 0;
+                            const sigma = raw._sigma || 0;
+                            const method = raw._method || '';
+                            const parts = [
+                                name,
+                                `权重 ${formatNumber(weight, 2)}%`,
+                                `VaR ${currency ? currency + ' ' : ''}${formatNumber(varAbs, 2)}`
+                            ];
+                            if (varPct != null && isFinite(varPct)) {
+                                parts.push(`VaR/净值 ${formatNumber(varPct, 2)}%`);
+                            }
+                            //if (isFinite(vol)) {
+                            //    parts.push(`年化波动 ${formatNumber(vol * 100, 2)}%`);
+                            //}
+                            if (isFinite(sigma)) {
+                                parts.push(`日波动 ${formatNumber(sigma * 100, 2)}%`);
+                            }
+                            if (method) {
+                                parts.push(`计算方式 ${method}`);
+                            }
+                            return parts.join(' | ');
+                        }
+                    }
+                },
+                datalabels: { display: false }
+            }
+        }
+    };
+
+    config.options.scales.x.afterBuildTicks = axis => { axis.ticks = xTicks.map(v => ({ value: v })); };
+
+    if (varChart) {
+        varChart.data.datasets[0].data = points;
+        varChart.options.scales.x.min = xMin;
+        varChart.options.scales.x.max = xMax;
+        varChart.options.scales.x.ticks.values = xTicks;
+        varChart.options.scales.y.title.text = yLabel;
+        varChart.update();
+    } else {
+        varChart = new Chart(ctx, config);
+    }
+}
+
+function initVarScatter() {
+    drawVarScatter();
+}
+
+document.addEventListener('DOMContentLoaded', initVarScatter);
+
+
+
+function drawDonut(id, lbls, vals) {
+    const el = document.getElementById(id).getContext('2d');
+    const colors = warmColdColors(vals.length || 0);
+    const chart = new Chart(el, {
+        type: 'doughnut',
+        data: { labels: lbls, datasets: [{ data: vals, backgroundColor: colors, borderWidth: 0, hoverOffset: 10 }] },
+        options: {
+            responsive: true,
+            cutout: '60%',
+            onClick: (evt, elements) => {
+                if (elements && elements.length > 0) {
+                    chart.update();
+                }
+            },
+            plugins: {
+                legend: { display: false},
+                tooltip: {
+                    backgroundColor: '#ffffff',
+                    titleColor: '#111111',
+                    bodyColor: '#111111',
+                    borderColor: '#e5e7eb',
+                    borderWidth: 1,
+                    displayColors: false,
+                    callbacks: {
+                        label: (ctx) => {
+                            const label = ctx.label || '';
+                            const val = Number(ctx.raw) || 0;
+                            const dataArr = (ctx.chart?.data?.datasets?.[0]?.data || []).map(x => Number(x)||0);
+                            const total = dataArr.reduce((a,b)=>a+b,0) || 0;
+                            const pct = total ? (val/total*100) : 0;
+                            return `${label}: ${val.toLocaleString()} (${pct.toFixed(1)}%)`;
+                        }
+                    }
+                },
+                datalabels: {
+                    color: '#111111',
+                    align: 'end',
+                    anchor: 'end',
+                    clamp: true,
+                    clip: false,
+                    formatter: makeFormatter(lbls, vals),
+                    textStrokeColor: '#ffffff',
+                    textStrokeWidth: 0,
+                    font: { weight: '600' }
+                }
+            }
+        }
+    });
+}
+
+drawDonut('pieTicker', labelsA, valuesA);
+drawDonut('pieType',   labelsB, valuesB);
+drawDonut('pieIndustry', labelsC, valuesC);
+
+// 雷达图（五边形）
+try {
+  const ctxR = document.getElementById('radarScore').getContext('2d');
+  new Chart(ctxR, {
+    type: 'radar',
+    data: {
+      labels: radarLabels,
+      datasets: [{
+        label: 'Scorecard',
+        data: radarValues,
+        fill: true,
+        backgroundColor: 'rgba(59,130,246,0.10)',
+        borderColor: 'rgb(59,130,246)',
+        pointBackgroundColor: 'rgb(30,64,175)'
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,          // 允许图表填满容器 → 半径更大
+      devicePixelRatio: 2,
+      layout: { padding: 1 },            // 减少外边距（越小半径越大）
+      elements: {
+        line: { borderWidth: 3 },
+        point: { radius: 1, hoverRadius: 2 }
+      },
+      scales: {
+        r: {
+          min: 0,
+          max: 5,
+          grid: { color: '#e5e7eb' },
+          angleLines: { color: '#e5e7eb' },
+          // ↓↓↓ 缩小或隐藏轴标签，避免吃掉半径
+          pointLabels: {
+            display: true,
+            // centerPointLabels: true,     // 如需把文字放到图内再开，但会略占内部空间
+            padding: 2,
+            font: { size: 16, weight: '500' }
+          },
+          ticks: { stepSize: 1, display: false }
+        }
+      },
+      plugins: {
+        legend: { display: false },
+        title: { display: false },
+        // ↓↓↓ 关键：关闭数值标签，否则会强占边缘空间，半径变小
+        datalabels: { display: false }
+      }
+    }
+  });
+} catch(e) { /* ignore */ }
+
+
+(function(){
+  // ---- 读元数据 ----
+  const metaEl = document.getElementById('spec-meta');
+  if(!metaEl) return;
+  const account = metaEl.dataset.account || '';
+  const totalMV = Number(metaEl.dataset.totalMv || metaEl.dataset.total_mv || 0) || 0;
+
+  // localStorage 键：按账户区分
+  const KEY = `spec_positions_${account}`;
+
+  // 载入/保存 已勾选 conId 集合
+  function loadSet(){
+    try{
+      const raw = localStorage.getItem(KEY);
+      if(!raw) return new Set();
+      const arr = JSON.parse(raw);
+      return new Set(Array.isArray(arr) ? arr : []);
+    }catch(e){ return new Set(); }
+  }
+  function saveSet(set){
+    localStorage.setItem(KEY, JSON.stringify(Array.from(set)));
+  }
+
+  // 根据行数据重算 “投机仓位占比”
+    function recalc(){
+    const set = loadSet();
+    let sumMV = 0;
+
+    // 统计被勾选标的的绝对市值之和
+    document.querySelectorAll('tbody tr[data-conid]').forEach(tr=>{
+        const cid = Number(tr.dataset.conid||0);
+        if(set.has(cid)){
+        const mv = Math.abs(Number(tr.dataset.mv||0)||0);
+        sumMV += mv;
+        }
+    });
+
+    // 分母：净清算价值（含现金等），来自 #spec-meta 的 data-net-liq
+    const metaEl = document.getElementById('spec-meta');
+    const netLiq = metaEl ? Math.abs(Number(metaEl.dataset.netLiq||0)) : 0;
+
+    const ratio = netLiq > 0 ? (sumMV / netLiq * 100) : 0;
+
+    // 一行展示（百分比 + 金额）
+    const line = document.getElementById('spec-line');
+    if(line){
+        line.textContent = `${ratio.toFixed(1)}% ( ${sumMV.toLocaleString()} USD)`;
+    }
+    }
+
+
+  // 初始化：勾选框根据已保存集合设初始状态
+  function init(){
+    const set = loadSet();
+    document.querySelectorAll('input.spec-toggle').forEach(cb=>{
+      const tr = cb.closest('tr');
+      if(!tr) return;
+      const cid = Number(tr.dataset.conid||0);
+      cb.checked = set.has(cid);
+      cb.addEventListener('change', ()=>{
+        const now = loadSet();
+        if(cb.checked) now.add(cid);
+        else           now.delete(cid);
+        saveSet(now);
+        recalc();
+      });
+    });
+    recalc();
+  }
+
+  // 若你的表格有前端排序/分页（DataTables 等），记得在渲染后再次 init
+  document.addEventListener('DOMContentLoaded', init);
+  // 如果你使用 DataTables，初始化后可加：table.on('draw', init)
+
+})();
+
+
+// 表格排序（市值 / 未实现盈亏 / 已实现盈亏）
+(function setupSorting(){
+    const table = document.querySelector('table');
+    if(!table) return;
+    const thead = table.tHead; const tbody = table.tBodies[0];
+    if(!thead || !tbody) return;
+    const ths = thead.querySelectorAll('th');
+
+    const targets = [0, 6, 7, 8];
+
+    const getNumber = (text)=>{
+        if (!text) return 0;
+        let s = text.replace(/,/g,'').trim();
+        if (/^\(.*\)$/.test(s)) s = '-' + s.slice(1,-1); // (123) -> -123
+        const n = parseFloat(s.replace(/[^0-9.\-]/g,''));
+        return isNaN(n) ? 0 : n;
+    };
+
+    const getText = (cell)=>{
+        return (cell?.textContent || '').trim();
+    };
+
+    targets.forEach((idx)=>{
+        const th = ths[idx];
+        if(!th) return;
+        th.classList.add('sortable');
+        th.addEventListener('click', ()=>{
+            const current = th.getAttribute('data-sort') || 'none';
+            Array.from(ths).forEach(h => { if(h!==th) h.removeAttribute('data-sort'); });
+            const next = current === 'asc' ? 'desc' : 'asc';
+            th.setAttribute('data-sort', next);
+
+            const rows = Array.from(tbody.querySelectorAll('tr'));
+            rows.sort((a,b)=>{
+                let cmp;
+                if (idx === 0) {
+                    // “标的”列：按文本自然排序（中英文都友好，数字序号也正确）
+                    const av = getText(a.cells[idx]);
+                    const bv = getText(b.cells[idx]);
+                    cmp = av.localeCompare(bv, 'zh', { numeric: true, sensitivity: 'base' });
+                } else {
+                    // 数值列
+                    const av = getNumber(a.cells[idx]?.textContent);
+                    const bv = getNumber(b.cells[idx]?.textContent);
+                    cmp = av - bv;
+                }
+                return next === 'asc' ? cmp : -cmp;
+            });
+            rows.forEach(r=>tbody.appendChild(r));
+        });
+    });
+})();
+
+</script>
+</body></html>
